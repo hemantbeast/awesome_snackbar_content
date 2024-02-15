@@ -1,8 +1,9 @@
+import 'dart:ui' as ui;
+
 import 'package:awesome_snackbar_content/src/assets_path.dart';
 import 'package:awesome_snackbar_content/src/content_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:ui' as ui;
 
 class AwesomeSnackbarContent extends StatelessWidget {
   /// `IMPORTANT NOTE` for SnackBar properties before putting this in `content`
@@ -37,8 +38,11 @@ class AwesomeSnackbarContent extends StatelessWidget {
   /// if you want to customize the font size of the message
   final double? messageFontSize;
 
+  /// if you don't want to show the close icon
+  final bool showCloseIcon;
+
   const AwesomeSnackbarContent({
-    Key? key,
+    super.key,
     this.color,
     this.titleFontSize,
     this.messageFontSize,
@@ -46,7 +50,8 @@ class AwesomeSnackbarContent extends StatelessWidget {
     required this.message,
     required this.contentType,
     this.inMaterialBanner = false,
-  }) : super(key: key);
+    this.showCloseIcon = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -106,8 +111,7 @@ class AwesomeSnackbarContent extends StatelessWidget {
                 AssetsPath.bubbles,
                 height: size.height * 0.06,
                 width: size.width * 0.05,
-                colorFilter:
-                    _getColorFilter(hslDark.toColor(), ui.BlendMode.srcIn),
+                colorFilter: _getColorFilter(hslDark.toColor(), ui.BlendMode.srcIn),
                 package: 'awesome_snackbar_content',
               ),
             ),
@@ -116,24 +120,15 @@ class AwesomeSnackbarContent extends StatelessWidget {
           // Bubble Icon
           Positioned(
             top: -size.height * 0.02,
-            left: !isRTL
-                ? leftSpace -
-                    8 -
-                    (isMobile ? size.width * 0.075 : size.width * 0.035)
-                : null,
-            right: isRTL
-                ? rightSpace -
-                    8 -
-                    (isMobile ? size.width * 0.075 : size.width * 0.035)
-                : null,
+            left: !isRTL ? leftSpace - 8 - (isMobile ? size.width * 0.075 : size.width * 0.035) : null,
+            right: isRTL ? rightSpace - 8 - (isMobile ? size.width * 0.075 : size.width * 0.035) : null,
             child: Stack(
               alignment: Alignment.center,
               children: [
                 SvgPicture.asset(
                   AssetsPath.back,
                   height: size.height * 0.06,
-                  colorFilter:
-                      _getColorFilter(hslDark.toColor(), ui.BlendMode.srcIn),
+                  colorFilter: _getColorFilter(hslDark.toColor(), ui.BlendMode.srcIn),
                   package: 'awesome_snackbar_content',
                 ),
                 Positioned(
@@ -150,7 +145,7 @@ class AwesomeSnackbarContent extends StatelessWidget {
 
           /// content
           Positioned.fill(
-            left: isRTL ? size.width * 0.03 : leftSpace,
+            left: isRTL ? size.width * 0.03 : leftSpace + 10,
             right: isRTL ? rightSpace : size.width * 0.03,
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -168,10 +163,7 @@ class AwesomeSnackbarContent extends StatelessWidget {
                       child: Text(
                         title,
                         style: TextStyle(
-                          fontSize: titleFontSize ??
-                              (!isMobile
-                                  ? size.height * 0.03
-                                  : size.height * 0.025),
+                          fontSize: titleFontSize ?? (!isMobile ? size.height * 0.03 : size.height * 0.025),
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),
@@ -196,25 +188,26 @@ class AwesomeSnackbarContent extends StatelessWidget {
 
                     IconButton(
                       onPressed: () {
+                        if (!showCloseIcon) {
+                          return;
+                        }
+
                         if (inMaterialBanner) {
-                          ScaffoldMessenger.of(context)
-                              .hideCurrentMaterialBanner();
+                          ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
                           return;
                         }
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                       },
                       icon: Icon(
                         Icons.close,
-                        color: Colors.white,
+                        color: showCloseIcon ? Colors.white : Colors.transparent,
                         size: size.height * 0.022,
                       ),
-                    ),
-
-                    
+                    )
                   ],
                 ),
                 SizedBox(
-                  height: size.height * 0.005,
+                  height: size.height * 0.001,
                 ),
 
                 /// `message` body text parameter
@@ -262,7 +255,6 @@ class AwesomeSnackbarContent extends StatelessWidget {
     }
   }
 
-  static ColorFilter? _getColorFilter(
-          ui.Color? color, ui.BlendMode colorBlendMode) =>
+  static ColorFilter? _getColorFilter(ui.Color? color, ui.BlendMode colorBlendMode) =>
       color == null ? null : ui.ColorFilter.mode(color, colorBlendMode);
 }
