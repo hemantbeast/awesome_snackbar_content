@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:flutter/material.dart';
 
 class AweseomSnackBarExample extends StatelessWidget {
   const AweseomSnackBarExample({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class AweseomSnackBarExample extends StatelessWidget {
                   content: AwesomeSnackbarContent(
                     title: 'On Snap!',
                     message:
-                        'This is an example error message that will be shown in the body of snackbar!',
+                        'This is an example error message that will be shown in the body of snackbar! With some large text message to show with full content available.',
 
                     /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
                     contentType: ContentType.failure,
@@ -45,8 +45,7 @@ class AweseomSnackBarExample extends StatelessWidget {
                   forceActionsBelow: true,
                   content: AwesomeSnackbarContent(
                     title: 'Oh Hey!!',
-                    message:
-                        'This is an example error message that will be shown in the body of materialBanner!',
+                    message: 'This is an example error message that will be shown in the body of materialBanner!',
 
                     /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
                     contentType: ContentType.success,
