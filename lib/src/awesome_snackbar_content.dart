@@ -57,7 +57,7 @@ class AwesomeSnackbarContent extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isRTL = Directionality.of(context) == TextDirection.rtl;
 
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery.sizeOf(context);
 
     // screen dimensions
     bool isMobile = size.width <= 768;
@@ -81,11 +81,21 @@ class AwesomeSnackbarContent extends StatelessWidget {
       horizontalPadding = size.width * 0.3;
     }
 
+    final width = size.width - ((leftSpace * 2) + 10) - rightSpace - (horizontalPadding * 2) - (size.width * 0.03);
+    final lines = numberOfLines(
+      text: message,
+      maxWidth: width,
+      style: TextStyle(
+        fontSize: messageFontSize ?? size.height * 0.016,
+        color: Colors.white,
+      ),
+    );
+
     return Container(
       margin: EdgeInsets.symmetric(
         horizontal: horizontalPadding,
       ),
-      height: size.height * 0.15,
+      height: size.height * (lines > 2 ? 0.15 : 0.125),
       child: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.topCenter,
@@ -151,9 +161,9 @@ class AwesomeSnackbarContent extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // SizedBox(
-                //   height: size.height * 0.01,
-                // ),
+                SizedBox(
+                  height: size.height * (lines > 2 ? 0.005 : 0.01),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -253,6 +263,21 @@ class AwesomeSnackbarContent extends StatelessWidget {
       default:
         return AssetsPath.failure;
     }
+  }
+
+  static int numberOfLines({
+    required String text,
+    required double maxWidth,
+    TextStyle? style,
+  }) {
+    final span = TextSpan(text: text, style: style);
+    final tp = TextPainter(
+      text: span,
+      textDirection: TextDirection.ltr,
+    );
+    tp.layout(maxWidth: maxWidth);
+
+    return tp.computeLineMetrics().length;
   }
 
   static ColorFilter? _getColorFilter(ui.Color? color, ui.BlendMode colorBlendMode) =>
