@@ -12,10 +12,33 @@ class ContentType {
   const ContentType(this.message, [this.color]);
 
   static const ContentType help = ContentType('help', DefaultColors.helpBlue);
-  static const ContentType failure =
-      ContentType('failure', DefaultColors.failureRed);
-  static const ContentType success =
-      ContentType('success', DefaultColors.successGreen);
-  static const ContentType warning =
-      ContentType('warning', DefaultColors.warningYellow);
+  static const ContentType failure = ContentType('failure', DefaultColors.failureRed);
+  static const ContentType success = ContentType('success', DefaultColors.successGreen);
+  static const ContentType warning = ContentType('warning', DefaultColors.warningYellow);
+}
+
+enum Position {
+  top,
+  center,
+  bottom,
+}
+
+enum AnimationType {
+  fromTop,
+  fromLeft,
+  fromRight,
+  fromBottom,
+}
+
+extension PositionExtension on Position {
+  AlignmentGeometry get alignment {
+    switch (this) {
+      case Position.center:
+        return Alignment.center;
+      case Position.top:
+        return Alignment.topCenter;
+      case Position.bottom:
+        return Alignment.bottomCenter;
+    }
+  }
 }
