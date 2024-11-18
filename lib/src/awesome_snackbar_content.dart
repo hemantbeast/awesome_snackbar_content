@@ -269,7 +269,7 @@ class AwesomeSnackbarContentState extends State<AwesomeSnackbarContent> with Tic
         margin: EdgeInsets.symmetric(
           horizontal: horizontalPadding,
         ),
-        height: size.height * (lines > 2 ? 0.15 : 0.125),
+        height: size.height * (lines > 2 ? 0.2 : 0.125),
         child: Stack(
           clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
